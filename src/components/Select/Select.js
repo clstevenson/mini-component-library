@@ -14,7 +14,12 @@ const Select = ({ label, value, onChange, children }) => {
       <SelectWrapper value={value} onChange={onChange}>
         {children}
       </SelectWrapper>
-      <Presentation>{displayedValue}</Presentation>
+      <Presentation>
+        {displayedValue}
+        <IconWrapper size={24}>
+          <Icon id="chevron-down" strokeWidth={1} size={24} />
+        </IconWrapper>
+      </Presentation>
     </Wrapper>
   );
 };
@@ -43,6 +48,7 @@ const Presentation = styled.div`
   color: ${COLORS.gray700};
   background-color: ${COLORS.transparentGray15};
   padding: 12px 16px;
+  padding-right: 52px;
   border-radius: 8px;
 
   /* Need fancier selector here for hover and focus */
@@ -53,6 +59,18 @@ const Presentation = styled.div`
   ${SelectWrapper}:focus + & {
     border: 1px solid ${COLORS.primary};
   }
+`;
+
+// put the icon next to the displayed value and make sure it is responsive to clicks
+const IconWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 10px;
+  margin: auto;
+  width: ${({ size }) => size + "px"};
+  height: ${({ size }) => size + "px"};
+  pointer-events: none;
 `;
 
 export default Select;
