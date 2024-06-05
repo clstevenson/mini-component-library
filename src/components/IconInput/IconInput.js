@@ -12,7 +12,7 @@ const IconInput = ({ label, icon, width = 250, size, placeholder }) => {
       <LabelItem for="icon-input">{label}</LabelItem>
       <InputWrapper>
         <IconWrapper>
-          <Icon id="search" size="24" />
+          <Icon id={icon} size="24" />
         </IconWrapper>
         <InputItem
           type="text"
@@ -37,17 +37,31 @@ const IconWrapper = styled.div`
 const InputItem = styled.input`
   font-family: "Roboto", sans-serif;
   font-size: ${({ size }) => {
-    if (size.toLowerCase() === "large") return "18px";
-    return "16px";
+    if (size.toLowerCase() === "large") return 18 / 16 + "rem";
+    return "1 rem";
   }};
   width: ${(prop) => prop.width + "px"};
   border: none;
+
+  &::placeholder {
+    font-weight: 400;
+    columns: ${COLORS.gray500};
+  }
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const InputWrapper = styled.div`
   display: inline-block;
   width: fit-content;
   border-bottom: 1px solid black;
+
+  /* this doesn't seem to work... */
+  ${InputItem}::focus {
+    outline: 1px solid black;
+  }
 `;
 
 export default IconInput;
