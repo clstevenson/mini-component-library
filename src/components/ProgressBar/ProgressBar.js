@@ -1,15 +1,34 @@
-/* eslint-disable no-unused-vars */
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { COLORS } from '../../constants';
-import VisuallyHidden from '../VisuallyHidden';
+import { COLORS } from "../../constants";
+import VisuallyHidden from "../VisuallyHidden";
 
-const ProgressBar = ({ value, size = 'small', label = 'Progress: ' }) => {
+// properties for the three types of progress bars
+const STYLES = {
+  small: {
+    height: 8,
+    padding: 0,
+    radius: 4,
+  },
+  medium: {
+    height: 12,
+    padding: 0,
+    radius: 4,
+  },
+  large: {
+    height: 16,
+    padding: 4,
+    radius: 7,
+  },
+};
 
-  let height = 8;
-  if (size.toLowerCase() === 'medium') height = 12;
-  if (size.toLowerCase() === 'large') height = 16;
+const ProgressBar = ({ value, size = "small" }) => {
+  const styles = STYLES[size];
+  // make sure correct value was used
+  if (!styles) {
+    throw new Error(`Unknown size: ${size}`);
+  }
 
   return (
     <Wrapper
@@ -17,29 +36,34 @@ const ProgressBar = ({ value, size = 'small', label = 'Progress: ' }) => {
       aria-valuenow={value}
       aria-valuemin="0"
       aria-valuemax="100"
+      styles={styles}
     >
       <VisuallyHidden>{value}</VisuallyHidden>
-      <Bar value={value} height={height} />
+      <BarWrapper>
+        <Bar value={value} styles={styles} />
+      </BarWrapper>
     </Wrapper>
-  )
+  );
 };
 
 const Wrapper = styled.div`
   background-color: ${COLORS.transparentGray15};
   box-shadow: inset 0px 2px 4px ${COLORS.transparentGray35};
-  border-radius: 4px;
+  border-radius: ${({ styles }) => styles.radius + "px"};
+  padding: ${({ styles }) => styles.padding};
+`;
+
+const BarWrapper = styled.div`
+  /* progress bar should be rounded at high values */
   overflow: hidden;
+  border-radius: 4px;
 `;
 
 const Bar = styled.div`
-  width: ${({ value }) => value + '%'};
-  height: ${({ height }) => height + 'px'};
-  margin: ${({ height }) => {
-    if (height === 16) return 4 + 'px';
-    return 0;
-  }};
+  width: ${({ value }) => value + "%"};
+  height: ${({ styles }) => styles.height + "px"};
   background-color: ${COLORS.primary};
-  border-radius: 4px 0px 0px 4px;
+  border-radius: 4px 0 0 4px;
 `;
 
 export default ProgressBar;
