@@ -6,13 +6,29 @@ import { COLORS } from "../../constants";
 import Icon from "../Icon";
 import VisuallyHidden from "../VisuallyHidden";
 
-const IconInput = ({ label, icon, width = 250, size, placeholder }) => {
+const STYLES = {
+  small: 16,
+  large: 24,
+};
+
+const IconInput = ({
+  label,
+  icon,
+  width = 250,
+  size = "small",
+  placeholder,
+}) => {
+  const style = STYLES[size];
+  if (!style) {
+    throw new Error(`Incorrect size: ${size}`);
+  }
+
   return (
     <>
       <LabelItem for="icon-input">{label}</LabelItem>
       <InputWrapper>
         <IconWrapper>
-          <Icon id={icon} size="24" />
+          <Icon id={icon} size={style} />
         </IconWrapper>
         <InputItem
           type="text"
@@ -32,6 +48,17 @@ const LabelItem = styled.label`
 
 const IconWrapper = styled.div`
   display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+`;
+
+const InputWrapper = styled.div`
+  display: inline-block;
+  width: fit-content;
+  border-bottom: 1px solid black;
+  position: relative;
 `;
 
 const InputItem = styled.input`
@@ -42,25 +69,21 @@ const InputItem = styled.input`
   }};
   width: ${(prop) => prop.width + "px"};
   border: none;
+  padding-left: 2em;
 
   &::placeholder {
     font-weight: 400;
     columns: ${COLORS.gray500};
   }
 
-  &:focus {
-    outline: none;
+  &:hover {
+    font-weight: 700;
   }
-`;
 
-const InputWrapper = styled.div`
-  display: inline-block;
-  width: fit-content;
-  border-bottom: 1px solid black;
-
-  /* this doesn't seem to work... */
-  ${InputItem}::focus {
-    outline: 1px solid black;
+  &:focus {
+    outline: 2px solid ${COLORS.primary};
+    outline-offset: 4px;
+    -moz-outline-radius: 2px;
   }
 `;
 
