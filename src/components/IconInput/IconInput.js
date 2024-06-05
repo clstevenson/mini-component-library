@@ -12,11 +12,12 @@ const STYLES = {
 };
 
 const IconInput = ({
-  label,
+  label = "Search",
   icon,
   width = 250,
   size = "small",
   placeholder,
+  ...delegated
 }) => {
   const style = STYLES[size];
   if (!style) {
@@ -24,41 +25,35 @@ const IconInput = ({
   }
 
   return (
-    <>
-      <LabelItem for="icon-input">{label}</LabelItem>
-      <InputWrapper>
-        <IconWrapper>
-          <Icon id={icon} size={style} />
-        </IconWrapper>
-        <InputItem
-          type="text"
-          id="icon-input"
-          width={width}
-          placeholder={placeholder}
-          size={size}
-        />
-      </InputWrapper>
-    </>
+    <Wrapper>
+      <label for="icon-input">
+        <VisuallyHidden> {label} </VisuallyHidden>
+      </label>
+      <IconWrapper>
+        <Icon id={icon} size={style} />
+      </IconWrapper>
+      <InputItem
+        type="text"
+        id="icon-input"
+        width={width}
+        placeholder={placeholder}
+        size={size}
+      />
+    </Wrapper>
   );
 };
 
-const LabelItem = styled.label`
-  margin-right: 15px;
+const Wrapper = styled.div`
+  display: inline-block;
+  width: fit-content;
+  position: relative;
 `;
-
 const IconWrapper = styled.div`
   display: inline-block;
   position: absolute;
   top: 0;
   left: 0;
   pointer-events: none;
-`;
-
-const InputWrapper = styled.div`
-  display: inline-block;
-  width: fit-content;
-  border-bottom: 1px solid black;
-  position: relative;
 `;
 
 const InputItem = styled.input`
@@ -69,15 +64,19 @@ const InputItem = styled.input`
   }};
   width: ${(prop) => prop.width + "px"};
   border: none;
-  padding-left: 2em;
+  border-bottom: 1px solid ${COLORS.black};
+  padding-left: 32px;
+  font-weight: 700;
+  color: ${COLORS.gray700};
 
   &::placeholder {
     font-weight: 400;
-    columns: ${COLORS.gray500};
+    color: ${COLORS.gray500};
   }
 
   &:hover {
     font-weight: 700;
+    color: ${COLORS.black};
   }
 
   &:focus {
