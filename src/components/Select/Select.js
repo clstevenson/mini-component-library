@@ -10,32 +10,48 @@ const Select = ({ label, value, onChange, children }) => {
   const displayedValue = getDisplayedValue(value, children);
 
   return (
-    <SelectWrapper displayed={displayedValue} value={value} onChange={onChange}>
-      {children}
-    </SelectWrapper>
+    <Wrapper>
+      <SelectWrapper value={value} onChange={onChange}>
+        {children}
+      </SelectWrapper>
+      <Presentation>{displayedValue}</Presentation>
+    </Wrapper>
   );
 };
 
-const SelectWrapper = styled.select`
-  font-family: "Roboto", sans-serif;
-  font-size: 16px;
-  /* my attempt at dynamic sizing */
-  width: ${({ displayed }) => {
-    return displayed.length + "rem";
-  }};
-  /* appearance: none; */
+const Wrapper = styled.div`
   position: relative;
+  width: max-content;
+`;
+
+// the select element is invisible and taken out of flow
+const SelectWrapper = styled.select`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  /* for older versions of Safari */
+  appearance: none;
+`;
+
+// this controls what the user actually sees before clicking on the control
+const Presentation = styled.div`
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  color: ${COLORS.gray700};
   background-color: ${COLORS.transparentGray15};
-  border: none;
-  padding: 12px;
+  padding: 12px 16px;
   border-radius: 8px;
 
-  &:hover {
-    font-weight: 700;
+  /* Need fancier selector here for hover and focus */
+  ${SelectWrapper}:hover + & {
+    color: ${COLORS.black};
   }
 
-  &:focus {
-    border: 2px solid ${COLORS.primary};
+  ${SelectWrapper}:focus + & {
+    border: 1px solid ${COLORS.primary};
   }
 `;
 
